@@ -5,45 +5,71 @@ using namespace std;
 // } Driver Code Ends
 class Solution
 {
-    private:
-    void dfs(int src,vector<int> adj[] , int vis[] , stack<int> &st)
-      {
-          vis[src] = 1;
-          
-          for(auto it: adj[src])
-          {
-              if(!vis[it])
-              {
-                dfs(it,adj,vis,st);
-              }
-          }
-          st.push(src);
-      }
-    
-	public:
-	//Function to return list containing vertices in Topological order. 
-	vector<int> topoSort(int V, vector<int> adj[]) 
-	{
-	    // code here
-	    int vis[V] = {0};
-        stack<int> st;
+    // dfs method
+//     private:
+//     void dfs(int src,vector<int> adj[] , int vis[] , stack<int> &st)
+//       {
+//           vis[src] = 1;
+//           for(auto it: adj[src])
+//           {
+//               if(!vis[it]) dfs(it,adj,vis,st);
+//           }
+//           st.push(src);
+//       }
+// 	public:
+// 	vector<int> topoSort(int V, vector<int> adj[]) 
+// 	{
+// 	    int vis[V] = {0};
+//         stack<int> st;
+//         for(int i = 0; i < V ; i++)
+//         {
+//             if(!vis[i]) dfs(i,adj,vis,st);
+//         }
+//         vector<int> ans;
+//         while(!st.empty())
+//         {
+//             ans.push_back(st.top());
+//             st.pop();
+//         }
+//         return ans;
+// 	}
+    // kahn's algorithm
+    public:
+    vector<int> topoSort(int V, vector<int> adj[])
+    {
+        int inDegree[V] = {0};
+        
         for(int i = 0; i < V ; i++)
         {
-            if(!vis[i])
+            for(auto it: adj[i])
             {
-                dfs(i,adj,vis,st);
+                inDegree[it]++;
             }
         }
-        vector<int> ans;
         
-        while(!st.empty())
+        queue<int> q;
+        for(int i = 0 ; i < V ; i++)
         {
-            ans.push_back(st.top());
-            st.pop();
+            if(inDegree[i] == 0) q.push(i);
         }
         
-        return ans;
-	}
+        vector<int> topo;
+        
+        while(!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+            topo.push_back(node);
+            // node is in your topo sort
+            // so please remove it from indegree
+            for(auto it: adj[node])
+            {
+                inDegree[it]--;
+                if(inDegree[it] == 0) q.push(it);
+            }
+        }
+        return topo;
+    }
 };
 
 //{ Driver Code Starts.
