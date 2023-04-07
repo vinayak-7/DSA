@@ -62,14 +62,12 @@ bool isCyclic(int V, vector<int> adj[])
         {
             if(inDegree[i] == 0) q.push(i);
         }
-        
-        vector<int> topo;
-        
+        int cnt = 0;
         while(!q.empty())
         {
             int node = q.front();
             q.pop();
-            topo.push_back(node);
+            cnt++;
             // node is in your topo sort
             // so please remove it from indegree
             for(auto it: adj[node])
@@ -78,7 +76,7 @@ bool isCyclic(int V, vector<int> adj[])
                 if(inDegree[it] == 0) q.push(it);
             }
         }
-        if(topo.size() == V) return false;
+        if(cnt == V) return false;
         return true;
 }
 };
