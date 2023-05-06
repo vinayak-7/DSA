@@ -21,8 +21,21 @@ long long game(long long int n,vector<int> &opt , int i,vector<vector<int>> &dp)
 long long int count(long long int n)
 {
 	vector<int> opt{3,5,10};
-	vector<vector<int>> dp(3 , vector<int>(n+1,-1));
-	return game(n,opt,2,dp);
+	vector<vector<int>> dp(3 , vector<int>(n+1,0));
+	
+	for(int i = 0 ; i <= n; i++) dp[0][i] = (i%opt[0] == 0);
+	
+	for(int i = 1 ; i < 3 ; i++){
+	    for(int j = 0 ; j <= n ; j++)
+	    {
+	        long long move = j-opt[i] >= 0 ? dp[i][j-opt[i]] : 0 ; 
+            long long dontMove =  dp[i-1][j] ;  
+
+            dp[i][j] = move + dontMove ;
+	    }
+	}
+	
+	return dp[2][n];
 	
 }
 
