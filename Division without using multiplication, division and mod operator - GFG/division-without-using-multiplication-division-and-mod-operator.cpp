@@ -15,7 +15,17 @@ class Solution
     long long divide(long long dividend, long long divisor) 
     {
         //code here
-        return dividend/divisor;
+        long long q = 0 ; 
+        long long divi = abs(dividend) ; long long dvisor = abs(divisor) ;
+        for(int i = 31 ; i >= 0 ; i --){
+            if((dvisor << i) <= divi){
+                q = q + (1LL << i) ; 
+                divi = divi - (dvisor << i) ; 
+            }
+        }
+        if((dividend < 0 and divisor < 0) or (dividend > 0 and divisor > 0)) return q ; 
+        
+        return -1*q ;
     }
 };
 
