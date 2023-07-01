@@ -17,37 +17,24 @@ class Solution{
        
         //code here
         vector<long long int> ans;
-        long long int product0 = 1 , product = 1;
+        long long int flag = 0 , product = 1;
+        
         for(int i = 0 ; i < n ; i++)
         {
-            product = product*nums[i];
+            if(nums[i] == 0) flag++;
+            else product = product*nums[i];
         }
         
-        if(product == 0)
+        for(int i = 0 ; i < n ; i++)
         {
-            int count = 0;
-            for(int i = 0 ; i < n ; i++)
+            if(flag > 1) ans.push_back(0);
+            else if(flag == 0) 
             {
-                if(nums[i] == 0) 
-                {
-                    count++;
-                }
-                if(count > 1 || nums[i] != 0) product0 = product0*nums[i];
+                ans.push_back(product/nums[i]);
             }
-            for(int i = 0 ; i < n ; i++)
-            {
-                if(nums[i] == 0) ans.push_back(product0);
-                else ans.push_back(0);
-            }
+            else if(flag == 1 && nums[i] != 0) ans.push_back(0);
+            else ans.push_back(product);
         }
-        else{
-            for(int i = 0 ; i < n ; i++)
-            {
-                long long int val = product/nums[i];
-                ans.push_back(val);
-            }
-        }
-        
         
         return ans;
     }
