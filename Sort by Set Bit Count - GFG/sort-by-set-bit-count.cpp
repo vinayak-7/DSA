@@ -5,37 +5,19 @@ using namespace std;
 
 // } Driver Code Ends
 class Solution{
-    private:
-    int setBits(int N) {
-        int res = 0;
-        while(N>0)
-        {
-            N = N & (N-1);
-            res++;
-        }
-
-        return res;
-    }
-    static bool cmp(pair<int,int>a,pair<int,int>b)
-    {
-       return a.second > b.second;
-    }
     public:
+    static int cmp(int a,int b)
+    {
+        int count1 = __builtin_popcount(a);
+        int count2 = __builtin_popcount(b);
+        if(count1 <= count2) return false;
+        
+        return true;
+    }
     void sortBySetBitCount(int arr[], int n)
     {
         // Your code goes here
-        vector<pair<int,int>> ans;
-        for(int i = 0 ; i < n ; i++)
-        {
-            int count = setBits(arr[i]);
-            ans.push_back({arr[i],count});
-        }
-        
-        stable_sort(ans.begin(),ans.end(),cmp);
-        for(int i = 0 ; i < n ; i++)
-        {
-            arr[i] = ans[i].first;
-        }
+        stable_sort(arr,arr+n,cmp);
     }
 };
 
