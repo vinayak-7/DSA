@@ -37,6 +37,8 @@ class Solution
     {
         // code here
         // return head of reversed list
+        if (head == NULL)
+            return head;
         Node* curr_node = head;
         Node* prev_node = NULL;
         Node* next_node = NULL;
