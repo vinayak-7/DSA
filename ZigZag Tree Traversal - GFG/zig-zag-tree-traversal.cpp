@@ -99,43 +99,64 @@ struct Node {
     }
 };
 */
-
 class Solution{
     public:
     //Function to store the zig zag order traversal of tree in a list.
     vector <int> zigZagTraversal(Node* root)
     {
-    	// Code here
-    	vector<int> ans;
-    	queue<Node*> q;
-    	q.push(root);
-    	int cnt=0;
-    	while(!q.empty())
-    	{
-    	    int size=q.size();
-    	    vector<int> x;
-    	    for(int i=0;i<size;i++)
-    	    {
-    	        Node* temp=q.front();
-    	        q.pop();
-    	        x.push_back(temp->data);
-    	        if(temp->left)q.push(temp->left);
-    	        
-    	        if(temp->right)q.push(temp->right);
-    	    }
-    	    cnt++;
-    	    
-    	    for(int i=0;i<x.size();i++)
-    	    {
-    	        if(cnt%2)
-    	            ans.push_back(x[i]);
-    	        else{
-    	            ans.push_back(x[x.size()-1-i]);
-    	        }
-    	    }
-    	    
-    	}
-    	return ans;
+        deque<Node*> q;
+        vector<int> res;
+        
+        q.push_back(root);
+        res.push_back(root->data);
+        Node* temp;
+   
+        // set initial level as 1, because root is
+        // already been taken care of.
+        int level = 1;
+                
+        while (!q.empty()) {
+            int n = q.size();
+    
+            for (int i = 0; i < n; i++) {
+    
+                // popping mechanism
+                if (level % 2 == 0) {
+                    temp = q.back();
+                    q.pop_back();
+                }
+                else {
+                    temp = q.front();
+                    q.pop_front();
+                }
+     
+                // pushing mechanism
+                if (level % 2 != 0) {
+    
+                    if (temp->right) {
+                        q.push_back(temp->right);
+                        res.push_back(temp->right->data);
+                    }
+                    if (temp->left) {
+                        q.push_back(temp->left);
+                        res.push_back(temp->left->data);
+                    }
+                }
+                else if (level % 2 == 0) {
+    
+                    if (temp->left) {
+                        q.push_front(temp->left);
+                        res.push_back(temp->left->data);
+                    }
+                    if (temp->right) {
+                        q.push_front(temp->right);
+                        res.push_back(temp->right->data);
+                    }
+                }   
+            }
+            level++; // level plus one
+        }
+        return res;    
     }
 };
 
