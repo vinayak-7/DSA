@@ -34,42 +34,30 @@ class Solution
     public:
     //Function to sort a linked list of 0s, 1s and 2s.
     Node* segregate(Node *head) {
-        
         // Add code here
-        int zero = 0 ;
-        int one = 0;
-        int two = 0;
+        int count[3] = {0, 0, 0}; 
+        Node *ptr = head;
         
-        Node* temp = head;
-        
-        while(temp != NULL)
+        while (ptr != NULL)
         {
-            if(temp->data == 0) zero++;
-            if(temp->data == 1) one++;
-            if(temp->data == 2) two++;
-            
-            temp = temp->next;
+        	count[ptr->data] += 1;
+        	ptr = ptr->next;
         }
-         temp = head;
-         while(temp != NULL)
-         {
-             while(zero--)
-             {
-                 temp->data = 0;
-                 temp = temp->next;
-             }
-             while(one--)
-             {
-                 temp->data = 1;
-                 temp = temp->next;
-             }
-             while(two--)
-             {
-                 temp->data = 2;
-                 temp = temp->next;
-             }
-         }
-         return head;
+ 
+        int i = 0;
+        ptr = head;
+        while (ptr != NULL)
+        {
+            if (count[i] == 0)
+            	++i;
+            else
+            {
+                ptr->data = i;
+                --count[i];
+                ptr = ptr->next;
+            }
+        }
+        return head;
     }
 };
 
