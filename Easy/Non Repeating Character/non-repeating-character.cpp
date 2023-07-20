@@ -9,23 +9,27 @@ class Solution
 {
     public:
     //Function to find the first non-repeating character in a string.
-    char nonrepeatingCharacter(string S)
+    char nonrepeatingCharacter(string s)
     {
        //Your code here
-       unordered_map<char,int> mp;
+       unordered_map<char , int> mp;
        
-       for(char ch : S){
+       for(int i = 0 ; i < s.size() ; i++)
+       {
+           char ch = s[i];
            mp[ch]++;
        }
        
-       for(int i = 0 ; i < S.length() ; i++)
+       for(int i = 0 ; i < s.size() ; i++)
        {
-           char c = S[i];
-           if(mp[c] == 1) return c;
+           char ch = s[i];
+           if(mp[ch] == 1)
+           {
+               return ch;
+           }
        }
-       
+
        return '$';
-       
     }
 
 };
