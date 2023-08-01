@@ -39,37 +39,76 @@ struct Node
 class Solution
 {
     public:
-    void inOrderHelp(Node *root,vector<Node*> &ans){
-        if(root!=NULL){
-            inOrderHelp(root->left,ans);
-            ans.push_back(root);
-            inOrderHelp(root->right,ans);
+    // void inOrderHelp(Node *root,vector<Node*> &ans){
+    //     if(root!=NULL){
+    //         inOrderHelp(root->left,ans);
+    //         ans.push_back(root);
+    //         inOrderHelp(root->right,ans);
+    //     }
+    // }
+    
+    // void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
+    // {
+    //     // Your code goes here
+    //     vector<Node*>ans;
+    //     inOrderHelp(root,ans);
+       
+    //     for(int i = 0 ; i < ans.size() ; i++)
+    //     {
+    //         if(key < ans[i]->key)
+    //         {
+    //             suc = ans[i];
+    //             break;
+    //         }
+    //     }
+    //     for(int i = ans.size()-1 ; i >= 0 ; i--)
+    //     {
+    //         if(key > ans[i]->key)
+    //         {
+    //             pre = ans[i];
+    //             break;
+    //         }
+    //     }
+    // }
+     void succ(Node *root , Node *&temp , int ind){
+        Node *current = root;
+        while(current){
+            if(current->key > ind){
+                temp = current;
+                current = current->left;
+            }
+            else{
+                current = current->right;
+
+            }
         }
     }
-    
+    void prede(Node *root , Node* &pred , int ind)
+    {
+        
+        Node *current = root;
+        while(current){
+            if(current->key < ind){
+                
+                pred = current;
+                current = current->right;
+                
+            }
+            else{
+                
+                current = current ->left;
+            }
+        }
+    }
     void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
     {
         // Your code goes here
-        vector<Node*>ans;
-        inOrderHelp(root,ans);
-       
-        for(int i = 0 ; i < ans.size() ; i++)
-        {
-            if(key < ans[i]->key)
-            {
-                suc = ans[i];
-                break;
-            }
-        }
-        for(int i = ans.size()-1 ; i >= 0 ; i--)
-        {
-            if(key > ans[i]->key)
-            {
-                pre = ans[i];
-                break;
-            }
-        }
+        suc = NULL;
+        pre = NULL;
+        succ(root , suc , key);
+        prede(root , pre, key);
     }
+        
 };
 
 //{ Driver Code Starts.
