@@ -29,40 +29,29 @@ int main(){
 
 
 void push(stack<int>& s, int a){
-	// Your code goes here
 	s.push(a);
 }
-
 bool isFull(stack<int>& s,int n){
-	// Your code goes here
-	if(s.size() == n) return true;
-	
+	if(s.size()==n)
+		return true;
 	return false;
 }
-
 bool isEmpty(stack<int>& s){
-	// Your code goes here
-	if(s.size() == 0) return true;
-	
+	if(s.size()==0)
+		return true;
 	return false;
 }
-
 int pop(stack<int>& s){
-	// Your code goes here
-	if(s.size() == 0) return -1;
-	
-	int temp = s.top();
+	int a= s.top();
 	s.pop();
-	return temp;
+	return a;
 }
-
 int getMin(stack<int>& s){
-	// Your code goes here
-	int mini = 1e9+7;
-	while(!s.empty())
-	{
-	    mini = min(mini,s.top());
-	    s.pop();
+	int m=pop(s);
+	while(!isEmpty(s)){
+		int n=pop(s);
+		if(n<m)
+			m=n;
 	}
-	return mini;
+	return m;
 }
