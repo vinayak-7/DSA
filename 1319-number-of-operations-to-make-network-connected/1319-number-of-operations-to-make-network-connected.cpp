@@ -1,31 +1,45 @@
-class Solution {
+class UnionFind {
+private:
+    vector<int> parent, rank;
+
 public:
-    void dfs(int node, vector<vector<int>>& adj, vector<bool>& visit) {
-        visit[node] = true;
-        for (int neighbor : adj[node]) {
-            if (!visit[neighbor]) {
-                dfs(neighbor, adj, visit);
-            }
+    UnionFind(int size) {
+        parent.resize(size);
+        rank.resize(size, 0);
+        for (int i = 0; i < size; i++) {
+            parent[i] = i;
         }
     }
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    void union_set(int x, int y) {
+        int xset = find(x), yset = find(y);
+        if (rank[xset] < rank[yset]) {
+            parent[xset] = yset;
+        } else if (rank[xset] > rank[yset]) {
+            parent[yset] = xset;
+        } else {
+            parent[yset] = xset;
+            rank[xset]++;
+        }
+    }
+};
 
+class Solution {
+public:
     int makeConnected(int n, vector<vector<int>>& connections) {
         if (connections.size() < n - 1) {
             return -1;
         }
 
-        vector<vector<int>> adj(n);
+        UnionFind dsu(n);
+        int numberOfConnectedComponents = n;
         for (auto& connection : connections) {
-            adj[connection[0]].push_back(connection[1]);
-            adj[connection[1]].push_back(connection[0]);
-        }
-
-        int numberOfConnectedComponents = 0;
-        vector<bool> visit(n);
-        for (int i = 0; i < n; i++) {
-            if (!visit[i]) {
-                numberOfConnectedComponents++;
-                dfs(i, adj, visit);
+            if (dsu.find(connection[0]) != dsu.find(connection[1])) {
+                numberOfConnectedComponents--;
+                dsu.union_set(connection[0], connection[1]);
             }
         }
 
