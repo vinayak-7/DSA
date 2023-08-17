@@ -5,31 +5,58 @@ using namespace std;
 // } Driver Code Ends
 class Solution{
 
+	private:
+	int getSum(int X[], int n)
+	{
+	    int sum = 0;
+	    for (int i = 0; i < n; i++)
+	        sum += X[i];
+	    return sum;
+	}
+	 
+
+	int getTarget(int A[], int n, int B[], int m)
+	{
+
+	    int sum1 = getSum(A, n);
+	    int sum2 = getSum(B, m);
+	 
+
+	    if ((sum1 - sum2) % 2 != 0)
+	        return INT_MIN;
+	    return ((sum1 - sum2) / 2);
+	}
+
 	public:
 	int findSwapValues(int A[], int n, int B[], int m)
 	{
-        // Your code goes here
-        int sumA=0,sumB=0;
-        
-        for(int i=0;i<n;i++)sumA+=A[i];
-        
-        for(int j=0;j<m;j++)sumB+=B[j];
-        
-        int tar=(sumA-sumB);
-        
-        if(tar%2!=0)return -1;
-        
-        tar=tar/2;
-        
-        unordered_map<int,int>mp;
-        
-        for(int i=0;i<n;i++)mp[A[i]]++;
-        
-        for(int i=0;i<m;i++){
-            if(mp[(tar+B[i])]>0)return 1;
-        }
-             
-        return -1;
+
+	    sort(A, A + n);
+	    sort(B, B + m);
+	 
+
+	    int target = getTarget(A, n, B, m);
+	 
+	    if (target == INT_MIN)
+	        return -1;
+	 
+	    int i = 0, j = 0;
+	    while (i < n && j < m) 
+	    {
+	        int diff = A[i] - B[j];
+	        if (diff == target) 
+	        {
+	            return 1;
+	        }
+
+	        else if (diff < target)
+	            i++;
+
+	        else
+	            j++;
+	    }
+	    
+	    return -1;
 	}
  
 
