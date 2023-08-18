@@ -40,37 +40,26 @@ while(t--)
 // } Driver Code Ends
 
 
-/*The structure of the class is
-class SortedStack{
-public:
-	stack<int> s;
-	void sort();
-};
-*/
-
-/* The below method sorts the stack s 
-you are required to complete the below method */
-void insertSorted(stack<int>& s , int num){
-    if(s.empty() || (s.top() < num)){
-        s.push(num);
-        return;
-    }
-    int n = s.top();
-    s.pop();
-    insertSorted(s , num);
-    s.push(n);
+void sortedInsert(stack<int> &s, int x)
+{
+	if(s.empty() or x>s.top())
+	{
+		s.push(x);
+		return;
+	}
+	int temp = s.top();
+	s.pop();
+	sortedInsert(s,x);
+	s.push(temp);
 }
+
 void SortedStack :: sort()
 {
-    //Your code here
-    // base case;
-    if(s.empty()){
-        return;
-    }
-    
-    int num = s.top(); // num have to insert at sorted position
-    s.pop();
-    
-    sort();
-    insertSorted(s , num);
+	if(!s.empty())
+	{
+		int x = s.top();
+		s.pop();
+		sort();
+		sortedInsert(s,x);
+	}
 }
