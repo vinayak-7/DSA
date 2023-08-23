@@ -3,76 +3,116 @@
 using namespace std;
 
 // } Driver Code Ends
-//User function template for C++
+//Backend complete function Template for C++
+
+bool compare1(vector<int> v1, vector<int> v2)
+{
+    return v1.front()<v2.front();
+}
 
 class Solution
 {
-    // kosaraju algorithms
+    public:
+    //vector to store the members of the strongly connected components.
+    vector<vector<int>> ans;  
+    vector<int> temp;   
     
-    private:
+    void findUtil(vector<int> adj[], stack<int> &st, int index[], int lowlink[], 
+                                                        bool onstack[], int i) 
+    {
+        static int curr = 0;
     
-    void dfs(int node, vector<int> adj[], vector<int> &vis, stack<int> &st) {
-        vis[node] = 1;
-        for(auto it : adj[node]) {
-            if(!vis[it]) {
-                dfs(it, adj, vis, st);
+        index[i] = lowlink[i] = ++curr;
+    
+        //pushing the ith node into the stack.
+        st.push(i);
+        
+        //marking ith node '1' i.e. it is present in the stack.
+        onstack[i] = 1; 
+    
+        for (int j = 0; j < adj[i].size(); ++j) 
+        {
+            //if adj[i][j] isn't visited, we call the function recursively.
+            if (index[adj[i][j]] == -1)
+            { 
+                
+                findUtil(adj, st, index, lowlink, onstack, adj[i][j]);
+                //updating lowlink at ith index.
+                lowlink[i] = min(lowlink[i], lowlink[adj[i][j]]);
+            } 
+            //else if the adj[i][j] node is visited and present in the stack.
+            else if (onstack[adj[i][j]]) 
+            { 
+                //updating lowlink at ith index.
+                lowlink[i] = min(lowlink[i], index[adj[i][j]]);
             }
         }
-        st.push(node);
-    }
-    
-    void dfs2(int node, vector<int> adj[], vector<int> &vis, vector<int>&ds) {
-        vis[node] = 1;
-        for(auto it : adj[node]) {
-            if(!vis[it]) {
-                dfs2(it, adj, vis, ds);
+        
+        //if lowlink[i]==index[i], it represents a strongly connected components
+        if (lowlink[i] == index[i]) 
+        { 
+            int w = 0;
+            //while stack is not empty and top element is not i.
+            while (!st.empty() && st.top() != i)
+            {
+                //we keep popping top element from stack and pushing it in list
+                //and marking it absent in stack.
+                w = (int)st.top();
+                temp.push_back(w);
+                onstack[w] = 0;
+                st.pop();
             }
+            
+            //we again pop the top element, store it in the list
+            //and mark it absent in the stack. 
+            w = (int)st.top();
+            temp.push_back(w);
+            
+            //pushing the list in final answer list.
+            ans.push_back(temp);
+            temp.clear();
+            onstack[w] = 0;
+            st.pop();
         }
-        ds.push_back(node);
     }
     
-	public:
     //Function to return a list of lists of integers denoting the members 
     //of strongly connected components in the given graph.
     vector<vector<int>> tarjans(int V, vector<int> adj[])
     {
-        //code here
-        vector<vector<int>> scc;
-        vector<int> ds, vis1(V, 0), vis2(V, 0);
+        int lowlink[V + 1], index[V + 1];
+
+        //boolean array onstack is true if ith node is present in the stack.
+        bool onstack[V + 1]; 
+        
         stack<int> st;
-        
-        vector<int> adj2[V];
-        
-        for(int i = 0 ; i < V ; i++) {
-            if(!vis1[i]) {
-                dfs(i, adj, vis1, st);
+    
+        for (int i=0; i<V; ++i) {
+            lowlink[i] = -1;
+            index[i] = -1;
+            onstack[i] = false;
+        }
+    
+        for (int i=0; i<V; ++i) 
+        {
+             //if index[i] is -1, ith node is not visited.
+            if (index[i] == -1)
+            {
+                //we call the findUtil function.
+                findUtil(adj, st, index, lowlink, onstack, i); 
             }
         }
         
-        for(int i = 0 ; i < V ; i++) {
-            for(auto it : adj[i]) {
-                adj2[it].push_back(i);
-            }
+        //sorting all the lists in final answer list.
+        for(int i=0; i<ans.size(); i++){
+            sort(ans[i].begin(),ans[i].end());
         }
+        sort(ans.begin(),ans.end(),compare1);
         
-        while(!st.empty()) {
-            int node = st.top();
-            st.pop();
-            if(!vis2[node]) {
-                dfs2(node, adj2, vis2, ds);
-                sort(ds.begin(), ds.end());
-                scc.push_back(ds);
-                ds.clear();
-            }
-        }
-        
-        sort(scc.begin(), scc.end());
-        
-        
-        return scc;
-        
+        return ans;
     }
 };
+
 //{ Driver Code Starts.
 
 
