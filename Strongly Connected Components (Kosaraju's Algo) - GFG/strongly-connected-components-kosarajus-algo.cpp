@@ -2,67 +2,87 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-// } Driver Code Ends 
+// } Driver Code Ends
 class Solution
 {
 	public:
-	
-	void new_dfs(vector<bool>&visited,vector<vector<int>>&transpose,int src)
+	//Function that creates transpose of the adjacency list.
+	void transpose(int V, vector<vector<int>> &adj, vector<int> transpose_adj[]) 
+	{
+        for (int u = 0; u < V; u++)
+            for (auto v : adj[u])
+                transpose_adj[v].push_back(u);
+    }
+    
+    stack<int> s;
+    void dfs(vector<int> adj[], bool *visited, int u) 
     {
-        visited[src]=true;
-        for(int i=0;i<transpose[src].size();i++)
-        {
-            if(visited[transpose[src][i]]==false)
-            new_dfs(visited,transpose,transpose[src][i]);
-        }
+        //marking the current node as visited.
+        visited[u] = true;
         
-    }
-    void dfs(vector<int>&vis,vector<vector<int>>& adj,int src, stack<int>&st)
-    {
-        vis[src]=1;
-        for(int i=0;i<adj[src].size();i++)
+        //iterating over adjacent vertices and calling function 
+        //recursively if any adjacent vertex is not visited.
+        for (auto v : adj[u])
         {
-            if(vis[adj[src][i]]==0)
-             dfs(vis,adj,adj[src][i],st);
+            if (visited[v] == 0)
+                dfs(adj, visited, v);
         }
-        st.push(src);
     }
-    int kosaraju(int v, vector<vector<int>>& adj)
+    
+    void fillorder(vector<vector<int>> &adj, bool *visited, int u)
     {
-         vector<int>vis(v,0);
-         stack<int>st;
-           for(int i=0; i<v;i++){
-           if(!vis[i])
-           dfs(vis,adj,i,st);
-           }
-           vector<vector<int>>transpose(v);
-           for(int i=0;i<v;i++)
-           {
-               for(int j=0;j<adj[i].size();j++)
-               {
-                   transpose[adj[i][j]].push_back(i);
-               }
-           }
-           
-           int count=0;
-           
-           vector<bool>visited(v,false);
-           
-           while(!st.empty())
-           {
-               if(visited[st.top()]==false)
-               {
-                   count++;
-                    visited[st.top()]=true;
-                   new_dfs(visited,transpose,st.top());
-               }
-               st.pop();
-           }
-           
-           
-           return count ;
-           
-       
+        //marking the current node as visited.
+        visited[u] = true;
+        
+        //iterating over adjacent vertices and calling function 
+        //recursively if any adjacent vertex is not visited.
+        for (auto v : adj[u])
+            if (visited[v] == 0)
+                fillorder(adj, visited, v);
+        
+        //pushing vertex into the stack.
+        s.push(u);
+    }
+    
+    //Function to find number of strongly connected components in the graph.
+    int kosaraju(int V, vector<vector<int>>& adj)
+    {
+        //using boolean list to mark visited nodes and currently 
+        //marking all the nodes as false.
+        bool visited[V];
+        memset(visited, 0, sizeof(visited));
+        
+        //filling vertices in stack according to their finishing times.
+        for (int i = 0; i < V; i++)
+            if (visited[i] == false)
+                fillorder(adj, visited, i);
+        
+        //creating transpose of adjacency list.
+        vector<int> transpose_adj[V];
+        transpose(V, adj, transpose_adj);
+    
+        //marking all the nodes as not visited again.
+        for (int i = 0; i < V; i++)
+            visited[i] = false;
+    
+        int ans = 0;
+        
+        //now processing all vertices in order defined by stack.
+        while (!s.empty()) 
+        {
+            //popping a vertex from stack.
+            int temp = s.top();
+            s.pop();
+            
+            //if vertex is not visited, we call dfs function 
+            //and increment the counter.
+            if (!visited[temp]) {
+                dfs(transpose_adj, visited, temp);
+                ans++;
+            }
+        }
+        //returning the count.
+        return ans;
     }
 };
 
