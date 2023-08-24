@@ -10,19 +10,20 @@ class Solution {
     int nthFibonacci(int n){
         // code here
         int mod = 1000000007;
-        int dp[] = {1, 1};
+        int prev2 = 0;
+        int prev = 1;
         
-        int i = 3;
-        while(i <= n) {
-            int temp = dp[1];
-            dp[1] = (dp[1] + dp[0]) % mod;
-            dp[0] = temp;
-            i++;
+        for(int i = 2 ; i <= n ; i++)
+        {
+            int curr = (prev + prev2)%mod;
+            prev2 = prev%mod;
+            prev = curr%mod;
         }
         
-        return dp[1] % 1000000007;
+        return prev % 1000000007;
     }
 };
+
 
 //{ Driver Code Starts.
 int main() {
