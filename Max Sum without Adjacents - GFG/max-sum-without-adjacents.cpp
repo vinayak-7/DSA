@@ -9,21 +9,18 @@ using namespace std;
 class Solution{
 public:	
 	// calculate the maximum sum with out adjacent
-	int f(int ind , int *arr , vector<int> &dp){
-	    if(ind == 0) return arr[ind];
-	    if(ind < 0) return 0;
-	    
-	    if(dp[ind] != -1) return dp[ind];
-	    
-	    int pick = arr[ind] + f(ind-2 , arr , dp);
-	    int notPick = 0 + f(ind-1 , arr , dp);
-	    
-	    return dp[ind] = max(pick , notPick);
-	}
 	int findMaxSum(int *arr, int n) {
 	    // code here
 	    vector<int> dp(n,-1);
-	    return f(n-1,arr,dp);
+	    dp[0] = arr[0];
+	    for(int ind = 1 ; ind < n ; ind++)
+	    {
+	        int pick = arr[ind];
+	        if(ind>1) pick += dp[ind-2];
+	        int notPick = 0 + dp[ind-1];
+	        dp[ind] = max(pick , notPick);
+	    }
+	    return dp[n-1];
 	}
 };
 
