@@ -5,26 +5,37 @@ using namespace std;
 // } Driver Code Ends
 class Solution{
     public:
+    typedef long long int ll; //define a typealias for long long int
+    
+    //Function to maximize the sum based on given conditions.
     long long int maximizeSum(long long int a[], int n, int k)
     {
-        sort(a,a+n);
-        long long int sum=0;
-        for(int i=0;i<n;i++)
-        {
-            if(a[i]<0 && k>0)
-            {
-                --k;
-                a[i]=-a[i];
+        sort(a,a+n); //sorting the array in ascending order
+        
+        ll sum=0, i;
+        
+        //iterating over the array
+        for(i=0;i<n;i++){
+            //if the current element is negative and we still have
+            //remaining negative numbers to replace, make it positive
+            //and reduce the value of k.
+            if(a[i]<0 and k>0){
+                a[i]*=-1;
+                k--;
             }
         }
-        if(k>0 && k%2!=0)
-        {
-            int pos=min_element(a,a+n)-a;
-            a[pos]=-a[pos];
-        }
-        for(int i=0;i<n;i++)
+        
+        sort(a,a+n); //sorting the array again after making changes
+        
+        //calculating the sum of all elements in the array
+        for(i=0;i<n;i++)
         sum+=a[i];
-        return sum;
+        
+        //if k is odd, subtract twice the minimum value in the array
+        if(k&1)
+        sum-=2*a[0];
+        
+        return sum; //return the maximum possible sum
     }
 };
 
