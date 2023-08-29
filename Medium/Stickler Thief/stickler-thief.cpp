@@ -10,14 +10,19 @@ class Solution
     //Function to find the maximum money the thief can get.
     int FindMaxSum(int arr[], int n)
     {
-        if(n==1) return arr[0];
-	    arr[1] = max(arr[0], arr[1]);
-	    for(int i = 2; i<n; i++)
+        // Your code here
+        int prev = arr[0];
+	    int prev2 = prev;
+	    for(int ind = 1 ; ind < n ; ind++)
 	    {
-	       arr[i] = max(arr[i-1], arr[i]+arr[i-2]);
+	        int pick = arr[ind];
+	        if(ind>1) pick += prev2;
+	        int notPick = 0 + prev;
+	        int curr = max(pick , notPick);
+	        prev2 = prev;
+	        prev = curr;
 	    }
-	    
-	    return arr[n-1];
+	    return prev;
     }
 };
 
