@@ -16,25 +16,29 @@ public:
         int n = mat.size();
         int m = mat[0].size();
         
-        vector<vector<int>> dp(n,vector<int>(m,-1));
+        vector<int> prev(m,0);
+        
+        // vector<vector<int>> dp(n,vector<int>(m,-1));
         for(int i = 0 ; i < n ; i++)
         {
+            vector<int> curr(m,0);
             for(int j = 0 ; j < m ; j++)
             {
-                if(i == 0 && j == 0) dp[i][j] = mat[i][j];
+                if(i == 0 && j == 0) curr[j] = mat[i][j];
                 else{
                     int up = mat[i][j];
-                    if(i>0)up += dp[i-1][j];
+                    if(i>0)up += prev[j];
                     else up += 1e9;
                     
                     int left = mat[i][j];
-                    if(j>0)left += dp[i][j-1];
+                    if(j>0)left += curr[j-1];
                     else left += 1e9;
                     
-                    dp[i][j] = min(up,left);
+                    curr[j] = min(up,left);
                 }
             }
+            prev = curr;
         }
-        return dp[n-1][m-1];
+        return prev[m-1];
     }
 };
