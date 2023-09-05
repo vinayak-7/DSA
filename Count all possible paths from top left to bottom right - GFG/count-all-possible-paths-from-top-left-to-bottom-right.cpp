@@ -21,26 +21,29 @@ class Solution {
     // }
     long long int numberOfPaths(int m, int n){
         // code here
-        vector<vector<long long>> dp( m , vector<long long> (n, -1));
+        // vector<vector<long long>> dp( m , vector<long long> (n, -1));
         int mod = 1e9 + 7;
+        vector<long long> prev(n,0);
+
         for(long long i = 0 ; i < m ; i++)
         {
+            vector<long long> curr(n,0);
             for(long long j = 0 ; j < n ; j++)
             {
                 
-                if(i == 0 && j == 0) dp[0][0] = 1;
+                if(i == 0 && j == 0) curr[j] = 1;
                 else
                 {
                     long long up = 0;
                     long long left = 0;
-                    if(i>0)up = dp[i-1][j];
-                    if(j>0)left = dp[i][j-1];
-                    dp[i][j] = (up + left)%mod;
+                    if(i>0)up = prev[j];
+                    if(j>0)left = curr[j-1];
+                    curr[j] = (up + left)%mod;
                 }
-                
             }
+            prev = curr;
         }
-        return dp[m-1][n-1];
+        return prev[n-1];
     }
 };
 
