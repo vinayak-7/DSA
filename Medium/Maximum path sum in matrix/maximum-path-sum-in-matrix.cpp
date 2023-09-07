@@ -9,30 +9,48 @@ using namespace std;
 
 class Solution{
 public:
-    int f(int i, int j, vector<vector<int>> &mat, vector<vector<int>> &dp)
-    {
-        if( j < 0 || j >= mat[0].size()) return -1e8;
+    // int f(int i, int j, vector<vector<int>> &mat, vector<vector<int>> &dp)
+    // {
+    //     if( j < 0 || j >= mat[0].size()) return -1e8;
         
-        if(i == 0) return mat[0][j];
-        if(dp[i][j] != -1) return dp[i][j];
+    //     if(i == 0) return mat[0][j];
+    //     if(dp[i][j] != -1) return dp[i][j];
         
-        int up = mat[i][j] + f(i-1,j,mat,dp);
-        int ldiag = mat[i][j] + f(i-1,j-1,mat,dp);
-        int rdiag = mat[i][j] + f(i-1,j+1,mat,dp);
+    //     int up = mat[i][j] + f(i-1,j,mat,dp);
+    //     int ldiag = mat[i][j] + f(i-1,j-1,mat,dp);
+    //     int rdiag = mat[i][j] + f(i-1,j+1,mat,dp);
         
-        return dp[i][j] = max(up , max(ldiag,rdiag));
-    }
+    //     return dp[i][j] = max(up , max(ldiag,rdiag));
+    // }
     int maximumPath(int n, vector<vector<int>> mat)
     {
         // code here
-        int m = mat[0].size();
-        vector<vector<int>> dp(n,vector<int>(m,-1));
+        // int m = mat[0].size();
+        vector<vector<int>> dp(n,vector<int>(n,-1));
         int maxi = -1e8;
-        for(int j = 0 ; j < m ; j++)
+        for(int j = 0 ; j < n ; j++)
         {
-            maxi = max(maxi,f(n-1,j,mat,dp));
+            dp[0][j] = mat[0][j];
         }
         
+        for(int i = 1 ; i < n ; i++)
+        {
+            for(int j = 0 ; j < n ; j++)
+            {
+                int ldiag = -1e8 , rdiag = -1e8;
+                
+                int up = mat[i][j] + dp[i-1][j];
+                if(j<n-1) rdiag = mat[i][j] + dp[i-1][j+1];
+                if(j>0) ldiag = mat[i][j] + dp[i-1][j-1];
+                
+                dp[i][j] = max(up , max(ldiag,rdiag));
+            }
+            
+        }
+        for(int i = 0 ; i < n ; i++)
+        {
+            maxi = max(maxi,dp[n-1][i]);
+        }
         return maxi;
     }
 };
