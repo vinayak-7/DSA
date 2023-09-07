@@ -26,30 +26,32 @@ public:
     {
         // code here
         // int m = mat[0].size();
-        vector<vector<int>> dp(n,vector<int>(n,-1));
+        // vector<vector<int>> dp(n,vector<int>(n,-1));
+        vector<int> prev(n);
         int maxi = -1e8;
         for(int j = 0 ; j < n ; j++)
         {
-            dp[0][j] = mat[0][j];
+            prev[j] = mat[0][j];
         }
         
         for(int i = 1 ; i < n ; i++)
         {
+            vector<int> curr(n);
             for(int j = 0 ; j < n ; j++)
             {
                 int ldiag = -1e8 , rdiag = -1e8;
                 
-                int up = mat[i][j] + dp[i-1][j];
-                if(j<n-1) rdiag = mat[i][j] + dp[i-1][j+1];
-                if(j>0) ldiag = mat[i][j] + dp[i-1][j-1];
+                int up = mat[i][j] + prev[j];
+                if(j<n-1) rdiag = mat[i][j] + prev[j+1];
+                if(j>0) ldiag = mat[i][j] + prev[j-1];
                 
-                dp[i][j] = max(up , max(ldiag,rdiag));
+                curr[j] = max(up , max(ldiag,rdiag));
             }
-            
+            prev = curr;
         }
         for(int i = 0 ; i < n ; i++)
         {
-            maxi = max(maxi,dp[n-1][i]);
+            maxi = max(maxi,prev[i]);
         }
         return maxi;
     }
