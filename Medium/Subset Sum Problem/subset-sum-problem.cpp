@@ -9,27 +9,49 @@ using namespace std;
 
 class Solution{   
 public:
-    bool check(int ind , int sum , vector<int> &arr,vector<vector<int>> &dp)
-    {
-        if(sum == 0) return true;
-        if(ind == 0) return (arr[ind] == sum);
-        if(dp[ind][sum] != -1) return dp[ind][sum];
+    // bool check(int ind , int sum , vector<int> &arr,vector<vector<int>> &dp)
+    // {
+    //     if(sum == 0) return true;
+    //     if(ind == 0) return (arr[ind] == sum);
+    //     if(dp[ind][sum] != -1) return dp[ind][sum];
         
-        bool not_take = check(ind-1 , sum , arr,dp);
-        bool take = false;
-        if(sum >= arr[ind])
+    //     bool not_take = check(ind-1 , sum , arr,dp);
+    //     bool take = false;
+    //     if(sum >= arr[ind])
+    //     {
+    //         take = check(ind-1 , sum - arr[ind],arr,dp);
+    //     }
+        
+    //     return dp[ind][sum] = take||not_take;
+    // }
+    bool isSubsetSum(vector<int>arr, int target){
+        // code here 
+        int index = arr.size();
+        vector<vector<bool>> dp(index,vector<bool>(target+1,false));
+        
+        for(int i = 0 ; i < index ; i++)
         {
-            take = check(ind-1 , sum - arr[ind],arr,dp);
+            dp[i][0] = true;
         }
         
-        return dp[ind][sum] = take||not_take;
-    }
-    bool isSubsetSum(vector<int>arr, int sum){
-        // code here 
-        int ind = arr.size();
-        vector<vector<int>> dp(ind,vector<int>(sum+1,-1));
-
-        return check(ind-1,sum,arr,dp);
+        if(dp[0][arr[0]] <= target) dp[0][arr[0]] = true;
+        
+        for(int ind = 1 ; ind < index ; ind++)
+        {
+            for(int sum = 1 ; sum <= target ; sum++)
+            {
+                bool not_take = dp[ind-1][sum];
+                bool take = false;
+                
+                if(arr[ind] <= sum)
+                {
+                    take = dp[ind-1][sum-arr[ind]];
+                }
+                
+                dp[ind][sum] = take||not_take;
+            }
+        }
+        return dp[index-1][target];
     }
 };
 
