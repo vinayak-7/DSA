@@ -9,27 +9,50 @@ using namespace std;
 
 class Solution{   
 public:
-    bool check(int ind , int sum , vector<int> &arr,vector<vector<int>> &dp)
-    {
-        if(sum == 0) return true;
-        if(ind == 0) return (arr[ind] == sum);
-        if(dp[ind][sum] != -1) return dp[ind][sum];
+    // bool check(int ind , int sum , vector<int> &arr,vector<vector<int>> &dp)
+    // {
+    //     if(sum == 0) return true;
+    //     if(ind == 0) return (arr[ind] == sum);
+    //     if(dp[ind][sum] != -1) return dp[ind][sum];
         
-        bool not_take = check(ind-1 , sum , arr,dp);
-        bool take = false;
-        if(sum >= arr[ind])
-        {
-            take = check(ind-1 , sum - arr[ind],arr,dp);
-        }
+    //     bool not_take = check(ind-1 , sum , arr,dp);
+    //     bool take = false;
+    //     if(sum >= arr[ind])
+    //     {
+    //         take = check(ind-1 , sum - arr[ind],arr,dp);
+    //     }
         
-        return dp[ind][sum] = take||not_take;
-    }
-    bool isSubsetSum(vector<int>arr, int sum){
+    //     return dp[ind][sum] = take||not_take;
+    // }
+    bool isSubsetSum(vector<int>arr, int target){
         // code here 
-        int ind = arr.size();
-        vector<vector<int>> dp(ind,vector<int>(sum+1,-1));
-
-        return check(ind-1,sum,arr,dp);
+        int index = arr.size();
+        // vector<vector<bool>> dp(index,vector<bool>(target+1,false));
+        vector<bool> prev(target+1,false);
+        
+        prev[0] = true;
+        
+        if(arr[0] <= target) prev[arr[0]] = true;
+        
+        for(int ind = 1 ; ind < index ; ind++)
+        {
+            vector<bool> curr(target+1,false);
+            curr[0] = true;
+            for(int sum = 1 ; sum <= target ; sum++)
+            {
+                bool not_take = prev[sum];
+                bool take = false;
+                
+                if(arr[ind] <= sum)
+                {
+                    take = prev[sum-arr[ind]];
+                }
+                
+                curr[sum] = take||not_take;
+            }
+            prev = curr;
+        }
+        return prev[target];
     }
 };
 
