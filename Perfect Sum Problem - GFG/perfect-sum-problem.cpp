@@ -6,47 +6,34 @@ using namespace std;
 class Solution{
 
 	public:
-// 	int f(int ind , int target , int arr[] , vector<vector<int>> &dp)
-// 	{
-// 	    if(target == 0) return 1;
-// 	    if(ind == 0) return arr[0] == target;
-// 	    if(dp[ind][target] != -1) return dp[ind][target];
-	    
-// 	    int not_taken = f(ind - 1 , target, arr, dp);
-// 	    int taken = 0;
-// 	    if(arr[ind] <= target) taken = f(ind - 1, target - arr[ind] , arr , dp);
-	    
-// 	    return dp[ind][target] = taken + not_taken;
-// 	}
-    int findWaysUtil(int ind, int target, int arr[], vector<vector<int>> &dp){
-        int mod = 1e9+7;
-        if(ind == 0)
+	int f(int ind , int target , int arr[] , vector<vector<int>> &dp)
+	{
+	    int mod = 1e9+7;
+	    if(ind == 0)
 	    {
 	        if(arr[0] == 0 and target == 0) return 2;
 	        if(target == 0 or target == arr[0]) return 1;
 	        return 0;
 	    }
-        
-        if(dp[ind][target]!=-1)
-            return dp[ind][target];
-            
-        int notTaken = findWaysUtil(ind-1,target,arr,dp) % mod;
-        
-        int taken = 0;
-        if(arr[ind]<=target)
-            taken = findWaysUtil(ind-1,target-arr[ind],arr,dp)% mod;
-            
-        return dp[ind][target] = (notTaken + taken) % mod;
-    }
+	    if(dp[ind][target] != -1) return dp[ind][target];
+	    
+	    int not_taken = f(ind - 1 , target, arr, dp);
+	    int taken = 0;
+	    if(arr[ind] <= target) taken = f(ind - 1, target - arr[ind] , arr , dp);
+	    
+	    return dp[ind][target] = (taken + not_taken)%mod;
+	}
+    
 	int perfectSum(int arr[], int n, int sum)
 	{
         // Your code goes here
         vector<vector<int>> dp(n,vector<int>(sum+1 , -1));
         
-        return findWaysUtil(n-1,sum,arr,dp);
+        return f(n-1,sum,arr,dp);
 	}
 	  
 };
+
 
 //{ Driver Code Starts.
 int main() 
