@@ -8,28 +8,49 @@ class Solution
 {
     public:
     //Function to return max value that can be put in knapsack of capacity W.
-    int f(int ind , int w , int wt[], int val[],vector<vector<int>> &dp)
-    {
-        if(ind == 0)
-        {
-            if(wt[0] <= w) return dp[ind][w] = val[0];
-            else return 0;
-        }
-        if(dp[ind][w] != -1) return dp[ind][w];
-        int not_take = f(ind-1,w,wt,val,dp);
-        int take = INT_MIN;
-        if(wt[ind] <= w)
-        {
-            take = val[ind] + f(ind-1,w-wt[ind],wt,val,dp);
-        }
+    // int f(int ind , int w , int wt[], int val[],vector<vector<int>> &dp)
+    // {
+    //     if(ind == 0)
+    //     {
+    //         if(wt[0] <= w) return dp[ind][w] = val[0];
+    //         else return 0;
+    //     }
+    //     if(dp[ind][w] != -1) return dp[ind][w];
+    //     int not_take = f(ind-1,w,wt,val,dp);
+    //     int take = INT_MIN;
+    //     if(wt[ind] <= w)
+    //     {
+    //         take = val[ind] + f(ind-1,w-wt[ind],wt,val,dp);
+    //     }
         
-        return dp[ind][w] = max(take,not_take);
-    }
-    int knapSack(int w, int wt[], int val[], int n) 
+    //     return dp[ind][w] = max(take,not_take);
+    // }
+    int knapSack(int maxWt, int wt[], int val[], int n) 
     { 
        // Your code here
-       vector<vector<int>>dp(n,vector<int>(w+1,-1));
-       return f(n-1,w,wt,val,dp);
+       vector<vector<int>>dp(n,vector<int>(maxWt+1,0));
+       
+       for(int i = wt[0] ; i <= maxWt ;i++)
+       {
+           dp[0][i] = val[0]; 
+       }
+       
+       for(int ind = 1 ; ind < n ; ind++)
+       {
+           for(int w = 0 ; w <= maxWt ; w++)
+           {
+                int not_take = dp[ind-1][w];
+                int take = INT_MIN;
+                if(wt[ind] <= w)
+                {
+                    take = val[ind] + dp[ind-1][w-wt[ind]];
+                }
+                
+                dp[ind][w] = max(take,not_take);
+           }
+       }
+       
+       return dp[n-1][maxWt];
     }
 };
 
