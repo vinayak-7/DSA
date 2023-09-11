@@ -3,41 +3,38 @@
 using namespace std;
 
 // } Driver Code Ends
-// Back-end complete function template in C++
 class Solution{
 
-    int mod = (int)(1e9 + 7); // Initialize mod value for calculations
-    vector<vector<int>> dp; // 2D vector to store dynamic programming values
-    int N; // Size of the array
-
-    int fun(int pos, int sum, int arr[]) {
-        if (pos >= N)
-            return sum == 0; // Check if sum is zero when array position reaches end
-
-        int &ans = dp[pos][sum]; // Reference to store calculated value in dp vector
-        if (ans != -1)
-            return ans; // Return the already calculated value from dp vector
-
-        ans = 0; // Initialize answer with zero
-
-        ans += fun(pos + 1, sum, arr); // Recursively call function for next position with sum unchanged
-        ans %= mod; // Take modulo of the answer to avoid overflow
-        if (arr[pos] <= sum)
-            ans += fun(pos + 1, sum - arr[pos], arr), ans %= mod; // Recursively call function for next position with reduced sum
-
-        return ans; // Return the calculated answer
-           
-    }
-
-    public:
-    int perfectSum(int arr[], int n, int sum)
-    {
-        dp.assign(n + 1, vector<int> (sum + 2, -1)); // Initialize dp vector with -1
-        N = n; // Assign n to N variable
+	public:
+	int f(int ind , int target , int arr[] , vector<vector<int>> &dp)
+	{
+	    int mod = 1e9+7;
+	    if(ind == 0)
+	    {
+	        if(arr[0] == 0 and target == 0) return 2;
+	        if(target == 0 or target == arr[0]) return 1;
+	        return 0;
+	    }
+	    if(dp[ind][target] != -1) return dp[ind][target];
+	    
+	    int not_taken = f(ind - 1 , target, arr, dp);
+	    int taken = 0;
+	    if(arr[ind] <= target) taken = f(ind - 1, target - arr[ind] , arr , dp);
+	    
+	    return dp[ind][target] = (taken + not_taken)%mod;
+	}
+    
+	int perfectSum(int arr[], int n, int sum)
+	{
+        // Your code goes here
+        vector<vector<int>> dp(n,vector<int>(sum+1 , -1));
         
-        return fun(0, sum, arr); // Call recursive function with initial parameters
-    }
+        return f(n-1,sum,arr,dp);
+	}
+	  
 };
+
+
 
 //{ Driver Code Starts.
 int main() 
