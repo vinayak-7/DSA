@@ -9,25 +9,27 @@ using namespace std;
 
 class Solution{
 public:
-    int knapSack(int n, int w, int val[], int wt[])
+    int f(int ind , int w , int wt[], int val[],vector<vector<int>> &dp)
     {
-        vector<int> dp(w+1 , 0);
-        
-        for(int i = 0 ; i <= w; i++) dp[i] = (val[0]*(i/wt[0])) ;
-        
-        for(int i = 1 ; i < n ; i++)
+        if(ind == 0)
         {
-            vector<int> temp(w+1 , 0);
-            for(int j = 0 ; j <= w; j++)
-            {
-                int included = wt[i] <= j ? val[i] + temp[j-wt[i]] : 0;
-                int notIncluded = dp[j];
-                
-                temp[j] = max(included,notIncluded);
-            }
-            dp = temp;
+            return ((int) w /wt[0]) * val[0];
         }
-        return dp[w];
+        if(dp[ind][w] != -1) return dp[ind][w];
+        int not_take = f(ind-1,w,wt,val,dp);
+        int take = INT_MIN;
+        if(wt[ind] <= w)
+        {
+            take = val[ind] + f(ind,w-wt[ind],wt,val,dp);
+        }
+        
+        return dp[ind][w] = max(take,not_take);
+    }
+    int knapSack(int n, int maxWt, int val[], int wt[])
+    {
+        // code here
+        vector<vector<int>>dp(n,vector<int>(maxWt+1,-1));
+        return f(n-1,maxWt,wt,val,dp);
     }
 };
 
