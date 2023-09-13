@@ -34,15 +34,12 @@ public:
         
         return dp[n][m];
     }
-    int longestPalindromeSubsequence(string s){
-        string t = s;
-        reverse(s.begin(),s.end());
-        return lcs(s,t);
-    }
     int findMinInsertions(string s){
         // code here 
         int n = s.size();
-        int k = longestPalindromeSubsequence(s);
+        string t = s;
+        reverse(s.begin(),s.end());
+        int k = lcs(s,t);
         return n-k;
     }
 };
