@@ -21,19 +21,20 @@ class Solution{
     
         return dp[ind][target] = notTaken || taken;
     }
-	int minDifference(int arr[], int n)  { 
+	int minDifference(int arr[], int n)  
+	{ 
 	    // Your code goes here
 	    int totSum = 0;
 
-      for (int i = 0; i < n; i++) {
-        totSum += arr[i];
-      }
+        for (int i = 0; i < n; i++) {
+            totSum += arr[i];
+        }
     
-      vector < vector < int >> dp(n, vector < int > (totSum + 1, -1));
+        vector < vector < int >> dp(n, vector < int > (totSum + 1, -1));
     
         for (int i = 0; i <= totSum; i++) 
         {
-            bool dummy = subsetSumUtil(n - 1, i, arr, dp);
+            subsetSumUtil(n - 1, i, arr, dp);
         }
         
         int mini = 1e9;
