@@ -26,8 +26,8 @@ public:
     {
         int n = prices.size();
         // vector<vector<int>> dp(n+1,vector<int>(2,-1));
-        vector<int>prev(2);
-        prev[0] = prev[1] = 0;
+        vector<int>ahead(2);
+        ahead[0] = ahead[1] = 0;
         for(int ind = n-1 ; ind >= 0 ;ind--)
         {
             vector<int>curr(2);
@@ -36,16 +36,16 @@ public:
             {
                 if(buy)
                 {
-                    profit = max(-prices[ind] + prev[0],prev[1]);
+                    profit = max(-prices[ind] + ahead[0],ahead[1]);
                 }
                 else
                 {
-                    profit = max(prices[ind] + prev[1],prev[0]);
+                    profit = max(prices[ind] + ahead[1],ahead[0]);
                 }
                 curr[buy] = profit;
             }
-            prev = curr;
+            ahead = curr;
         }
-        return prev[1];
+        return ahead[1];
     }
 };
