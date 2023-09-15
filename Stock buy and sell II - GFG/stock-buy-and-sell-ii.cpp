@@ -33,15 +33,18 @@ class Solution {
   public:
     int stockBuyAndSell(int n, vector<int> &prices) {
         // code here
-        int profit = 0;
-        for(int i = 1 ; i < n ; i++)
+        int aheadBuy,aheadNotBuy,currBuy,currNotBuy;
+        aheadBuy = aheadNotBuy = 0 ;
+        for(int ind = n-1 ; ind >= 0 ;ind--)
         {
-            if(prices[i] > prices[i-1])
-            {
-                profit += prices[i] - prices[i-1];
-            }
+            currNotBuy = max(prices[ind] + aheadBuy,aheadNotBuy);
+            currBuy = max(-prices[ind] + aheadNotBuy,aheadBuy);
+            
+            
+            aheadBuy = currBuy;
+            aheadNotBuy = currNotBuy;
         }
-        return profit;
+        return aheadBuy;
     }
 };
 
