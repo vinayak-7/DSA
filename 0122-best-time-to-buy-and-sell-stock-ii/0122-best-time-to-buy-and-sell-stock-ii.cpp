@@ -26,24 +26,19 @@ public:
     {
         int n = prices.size();
         // vector<vector<int>> dp(n+1,vector<int>(2,-1));
-        vector<int>ahead(2,0),curr(2,0);
+        // vector<int>ahead(2,0),curr(2,0);
         // dp[n][0] = dp[n][1] = 0;
+        int aheadBuy,aheadNotBuy,currBuy,currNotBuy;
+        aheadBuy = aheadNotBuy = 0 ;
         for(int ind = n-1 ; ind >= 0 ;ind--)
         {
-            for(int buy = 0 ; buy <= 1 ; buy++)
-            {
-                if(buy)
-                {
-                    curr[buy] = max(-prices[ind] + ahead[0],ahead[1]);
-                }
-                else
-                {
-                    curr[buy] = max(prices[ind] + ahead[1],ahead[0]);
-                }
-                // curr[buy] = profit;
-            }
-            ahead = curr;
+            currNotBuy = max(prices[ind] + aheadBuy,aheadNotBuy);
+            currBuy = max(-prices[ind] + aheadNotBuy,aheadBuy);
+            
+            
+            aheadBuy = currBuy;
+            aheadNotBuy = currNotBuy;
         }
-        return ahead[1];
+        return aheadBuy;
     }
 };
