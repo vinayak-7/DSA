@@ -6,27 +6,34 @@ using namespace std;
 
 // } Driver Code Ends
 //User function Template for C++
-int maxProfit(vector<int>& prices) {
-    if(!prices.size()) 
+
+int maxProfit(vector<int>&prices){
+    //Write your code here..
+    int n = prices.size();  
+    vector<vector<int>> dp(n+1,vector<int>(5,0));
+    for(int ind = n-1 ; ind >= 0 ; ind--)
     {
-        return 0;
+        dp[ind][0] = 0;
     }
-    int n = prices.size();
-    int maxProfit = 0;
-    int left[n], right[n];
-    int leftmin = prices[0], rightmax = prices[n-1];
-    left[0] = 0; right[n - 1] = 0;                                     // because we can't make any profit with just 1 element
-    int i,j;
-    for(i = 1, j = n-2; i < n, j >= 0; i++, j--){
-        leftmin  = min(leftmin, prices[i]);                            // find the minimum price till now
-        left[i]  = max(left[i - 1], prices[i] - leftmin);              // max of selling today or skipping (previous max profit)
-        rightmax = max(rightmax, prices[j]);                           // find the maximum price to the right
-        right[j] = max(right[j + 1], rightmax - prices[j]);            // max of buying today or skipping
+    for(int trans = 0 ; trans <= 3 ; trans++)
+    {
+        dp[0][trans] = 0;
     }
-    for(int i = 0; i < n; i++){
-        maxProfit = max(maxProfit, left[i] + right[i]);
+    for(int ind = n-1 ; ind >= 0 ; ind--)
+    {
+        for(int trans = 0 ; trans <= 3 ; trans++)
+        {
+            if(trans % 2 == 0)
+            {
+                dp[ind][trans] = max(-prices[ind] + dp[ind+1][trans+1], dp[ind+1][trans]);
+            }
+            else
+            {
+                dp[ind][trans] = max(prices[ind] + dp[ind+1][trans+1], dp[ind+1][trans]);
+            }
+        }
     }
-    return maxProfit;
+    return dp[0][0];
 }
 
 //{ Driver Code Starts.
