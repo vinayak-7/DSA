@@ -30,7 +30,6 @@ public:
         // dp[n][0] = dp[n][1] = 0;
         for(int ind = n-1 ; ind >= 0 ;ind--)
         {
-            int profit = 0;
             for(int buy = 0 ; buy <= 1 ; buy++)
             {
                 if(buy)
