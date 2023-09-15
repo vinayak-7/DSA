@@ -35,13 +35,13 @@ public:
             {
                 if(buy)
                 {
-                    profit = max(-prices[ind] + ahead[0],ahead[1]);
+                    curr[buy] = max(-prices[ind] + ahead[0],ahead[1]);
                 }
                 else
                 {
-                    profit = max(prices[ind] + ahead[1],ahead[0]);
+                    curr[buy] = max(prices[ind] + ahead[1],ahead[0]);
                 }
-                curr[buy] = profit;
+                // curr[buy] = profit;
             }
             ahead = curr;
         }
