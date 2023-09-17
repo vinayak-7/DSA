@@ -31,12 +31,8 @@ class Solution{
                    dp2[ind] = max(dp2[ind] , 1 + dp2[prev]);
                }
            }
+           len = max(len , dp1[ind] + dp2[ind] - 1);
         }
-        for(int i = 0 ; i < n ; i++)
-        {
-            len = max(len , dp1[i] + dp2[i] - 1);
-        }
-        
         return len;
 	}
 };
