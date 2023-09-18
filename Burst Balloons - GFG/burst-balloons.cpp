@@ -6,26 +6,25 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
 public:
-    int maxCoins(int k, vector<int> &nums) {
+    int maxCoins(int n, vector<int> &nums) {
         // code here
-        int n = k + 2;        
-        vector<vector<int>> dp(n, vector<int>(n));
-        vector<int> new_nums(n, 1);
-        int i = 1;
-        for(auto num : nums) {
-            new_nums[i++] = num;
-        }
-        for(int len = 2; len <= n; len++) { 
-            //iterate from interval length from 2 to n
-            for(int i = 0; i <= n - len; i++) {
-                int j = i + len - 1;
-                //select between left and right boundary (i, j)
-                for(int k = i + 1; k < j; k++) { 
-                    dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + new_nums[i] * new_nums[k] * new_nums[j]);
+        nums.push_back(1);
+        nums.insert(nums.begin(),1);
+
+        vector<vector<int>> dp(n+2,vector<int>(n+2,0));
+
+        for(int i=n;i>0;i--){
+            for(int j=i;j<=n;j++){
+                int maxCoins=INT_MIN;
+                for(int k=i;k<=j;k++){
+                    int coins=nums[i-1]*nums[k]*nums[j+1] + dp[i][k-1] + dp[k+1][j];
+                    maxCoins=max(maxCoins,coins);
                 }
+
+                dp[i][j]=maxCoins;
             }
         }
-        return dp[0][n - 1];
+        return dp[1][n];
     }
 };
 
