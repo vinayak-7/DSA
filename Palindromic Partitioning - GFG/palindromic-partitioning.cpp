@@ -9,7 +9,7 @@ using namespace std;
 
 class Solution{
 public:
-    int palin(string str, int i, int j) {
+    int isPalindrome(string str, int i, int j) {
         while (i < j) {
             if (str[i] != str[j]) return 0;
             i++;
@@ -18,25 +18,36 @@ public:
         return 1;
     }
 
-    int op(string str, int start, int end, vector<int>& dp) {
-        if (start >= end) return 0;
-        if (dp[start] != -1) return dp[start];
+    // int f(string str, int start, int end, vector<int>& dp) {
+    //     if (start == end) return 0;
+    //     if (dp[start] != -1) return dp[start];
 
-        int c = INT_MAX;
-        for (int i = start; i < end; i++) {
-            if (palin(str, start, i)) {
-                c = min(c, 1 + op(str, i + 1, end, dp));
-            }
-        }
-
-        if (palin(str, start, end - 1)) return 0;
-
-        return dp[start] = c;
-    }
+    //     int minCost = INT_MAX;
+    //     for (int i = start; i < end; i++) {
+    //         if (isPalindrome(str, start, i)) {
+    //             minCost = min(minCost, 1 + f(str, i + 1, end, dp));
+    //         }
+    //     }
+    //     return dp[start] = minCost;
+    // }
 
     int palindromicPartition(string str) {
-        vector<int> dp(str.size(), -1);
-        return op(str, 0, str.size(), dp);
+        int n = str.size();
+        vector<int> dp(n+1, 0);
+        dp[n] = 0;
+        
+        for(int start = n-1 ; start >= 0 ; start--)
+        {
+            //start....i
+            int minCost = INT_MAX;
+            for (int i = start; i < n; i++) {
+                if (isPalindrome(str, start, i)) {
+                    minCost = min(minCost, 1 + dp[i+1]);
+                }
+            }
+            dp[start] = minCost;
+        }
+        return dp[0]-1;
     }
 };
 
