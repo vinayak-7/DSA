@@ -34,7 +34,7 @@ public:
     int palindromicPartition(string str) {
         int n = str.size();
         vector<int> dp(n+1, 0);
-        dp[n] = 0;
+        // dp[n] = 0;
         
         for(int start = n-1 ; start >= 0 ; start--)
         {
