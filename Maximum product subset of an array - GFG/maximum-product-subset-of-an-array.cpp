@@ -5,27 +5,69 @@
 using namespace std;
 
 // } Driver Code Ends
-//User function Template for C++
+//Back-end complete function Template for C++
+
 class Solution{
     public:
-    long long int findMaxProduct(vector<int>&a, int n){
-        //Write your code here 
-        if(n == 1) return a[0];
-        long long int ans = 1,mod = 1e9 + 7;
-        int mx = -11,c = 0,z = 0;
-        for(int i = 0;i < n;i++){
-            if(a[i] < 0){
-                c++;
-                mx = max(mx,a[i]);
-            }
-            if(a[i]) ans = (ans*a[i])%mod;
-            else z++;
-        }
-        if(c == 1 && z == n-1 || z == n) return 0;
-        return c%2 ? ans/mx : ans;
+    long long int findMaxProduct(vector<int>&arr, int n)
+{
+    if (n == 1)
+    {	
+        // Only 1 element in the array.
+        return arr[0];
     }
+    
+    long long int ans = 1;
+    int mod = 1e9 + 7;
+    int id = -1, minElement = 0;
+    int zeroCount = 0, negCount  = 0;
+    
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] == 0)
+        {   
+           // Counting number of zeros.
+           zeroCount++; 
+        }
+        else if (arr[i] < 0)
+        {   
+            // Counting number of negative numbers.
+            negCount++;
+            if (id == -1 || arr[i] > minElement)
+            {   
+                // Storing the index of negative element having least magnitude.
+                id = i;
+                minElement = arr[i];
+            }
+        }
+    }
+    if(zeroCount == n)
+    {   
+        // If there are all zeros.
+        return 0;
+    }
+    if (negCount == 1 && zeroCount == n - 1)
+    {   
+        // If all elements are zero except one negative element, then return 0.
+        return 0;
+    }
+    for (int i = 0; i < n; i++)
+    {
+        if(arr[i] == 0)
+        {
+            continue;
+        }
+        if(negCount % 2 == 1 && i == id)
+        {   
+            // Removing the negative element having least magnitude.  
+            continue;
+        }
+        ans = ((ans * arr[i]) % mod + mod) % mod;
+        
+    }
+    return ans;
+}
 };
-
 
 
 //{ Driver Code Starts.
