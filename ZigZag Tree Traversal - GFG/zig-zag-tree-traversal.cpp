@@ -102,63 +102,36 @@ struct Node {
 class Solution{
     public:
     //Function to store the zig zag order traversal of tree in a list.
+    void fun(Node* root,vector<vector<int>>& ans, int level)
+    {
+        if (root == nullptr) {
+            return;
+        }
+        if (ans.size() > level) {
+            ans[level].push_back(root->data);
+        } else {
+            ans.push_back({root->data});        
+        }
+        fun(root->left,ans, level+1);
+        fun(root->right,ans, level+1);
+    }
     vector <int> zigZagTraversal(Node* root)
     {
-        deque<Node*> q;
+        vector<vector<int>> ans;
+        fun(root,ans,0);
         vector<int> res;
-        
-        q.push_back(root);
-        res.push_back(root->data);
-        Node* temp;
-   
-        // set initial level as 1, because root is
-        // already been taken care of.
-        int level = 1;
-                
-        while (!q.empty()) {
-            int n = q.size();
-    
-            for (int i = 0; i < n; i++) {
-    
-                // popping mechanism
-                if (level % 2 == 0) {
-                    temp = q.back();
-                    q.pop_back();
-                }
-                else {
-                    temp = q.front();
-                    q.pop_front();
-                }
-     
-                // pushing mechanism
-                if (level % 2 != 0) {
-    
-                    if (temp->right) {
-                        q.push_back(temp->right);
-                        res.push_back(temp->right->data);
-                    }
-                    if (temp->left) {
-                        q.push_back(temp->left);
-                        res.push_back(temp->left->data);
-                    }
-                }
-                else if (level % 2 == 0) {
-    
-                    if (temp->left) {
-                        q.push_front(temp->left);
-                        res.push_back(temp->left->data);
-                    }
-                    if (temp->right) {
-                        q.push_front(temp->right);
-                        res.push_back(temp->right->data);
-                    }
-                }   
+        for(int i = 0 ; i < ans.size() ; i++)
+        {
+            if(i % 2 != 0)reverse(ans[i].begin(),ans[i].end());
+            for(int j = 0 ; j < ans[i].size() ; j++)
+            {
+                res.push_back(ans[i][j]);
             }
-            level++; // level plus one
-        }
-        return res;    
+        } 
+        return res;
     }
 };
+
 
 //{ Driver Code Starts.
 
