@@ -8,17 +8,8 @@ class Solution {
   public:
     vector<int> intersectionWithDuplicates(vector<int>& a, vector<int>& b) {
         // code here
-        set<int>s1;
-        set<int>s2;
-        
-        for(int it = 0 ; it < a.size() ; it++)
-        {
-            s1.insert(a[it]);
-        }
-        for(int it = 0 ; it < b.size() ; it++)
-        {
-            s2.insert(b[it]);
-        }
+        set<int>s1(a.begin(),a.end());
+        set<int>s2(b.begin(),b.end());
         
         vector<int> ans;
         
